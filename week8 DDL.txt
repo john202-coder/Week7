@@ -1,0 +1,52 @@
+-- projectswk8.category definition
+
+CREATE TABLE `category` (
+  `category_id` int NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(128) NOT NULL,
+  PRIMARY KEY (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- projectswk8.material definition
+
+CREATE TABLE `material` (
+  `material_id` int NOT NULL AUTO_INCREMENT,
+  `material_name` varchar(128) NOT NULL,
+  `num_required` int DEFAULT NULL,
+  `cost` decimal(7,2) DEFAULT NULL,
+  `project_id` int NOT NULL,
+  PRIMARY KEY (`material_id`),
+  KEY `material_project_FK` (`project_id`),
+  CONSTRAINT `material_project_FK` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- projectswk8.project definition
+
+CREATE TABLE `project` (
+  `project_id` int NOT NULL AUTO_INCREMENT,
+  `project_name` varchar(128) NOT NULL,
+  `estimated_hours` decimal(7,2) DEFAULT NULL,
+  `actual_hours` decimal(7,2) DEFAULT NULL,
+  `difficulty` int DEFAULT NULL,
+  `notes` text,
+  PRIMARY KEY (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;-- projectswk8.project_category definition
+
+CREATE TABLE `project_category` (
+  `project_id` int NOT NULL,
+  `category_id` int NOT NULL,
+  UNIQUE KEY `project_category_unique` (`project_id`),
+  UNIQUE KEY `project_category_unique_1` (`category_id`),
+  CONSTRAINT `project_category_category_FK` FOREIGN KEY (`project_id`) REFERENCES `category` (`category_id`),
+  CONSTRAINT `project_category_project_category_FK` FOREIGN KEY (`category_id`) REFERENCES `project_category` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- projectswk8.step definition
+
+CREATE TABLE `step` (
+  `step_id` int NOT NULL AUTO_INCREMENT,
+  `project_id` int NOT NULL,
+  `step_text` text NOT NULL,
+  `step_order` int NOT NULL,
+  PRIMARY KEY (`step_id`),
+  KEY `step_project_FK` (`project_id`),
+  CONSTRAINT `step_project_FK` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
